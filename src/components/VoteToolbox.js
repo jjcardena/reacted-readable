@@ -24,7 +24,6 @@ class VoteToolbox extends Component {
 }
 
 VoteToolbox.propTypes = {
-  voteScore: PropTypes.number.isRequired,
   parentName: PropTypes.string.isRequired
 }
 

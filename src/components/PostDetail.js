@@ -4,9 +4,9 @@ import { connect } from 'react-redux';
 import Card from 'react-toolbox/lib/card/Card';
 import CardText from 'react-toolbox/lib/card/CardText';
 import Input from 'react-toolbox/lib/input/Input';
-import { getTimestamp} from '../utils/helpers';
+import { getTimestamp, EDIT_OPERATION } from '../utils/helpers';
 import { addPost, modifyPost, fetchPosts } from '../utils/api'
-import { updatePost, insertPost, deletePost, retrieveAllPosts, notifyError } from '../actions'
+import { updatePost, insertPost, deletePost, retrieveAllPosts, notifyError, selectCategory } from '../actions'
 import MenuItem from 'react-toolbox/lib/menu/MenuItem';
 import CustomDropDown from './CustomDropDown'
 import ConfirmToolbox  from './ConfirmToolbox'
@@ -22,7 +22,8 @@ class PostDetail extends Component {
   componentDidMount = () => {
     if(!this.props.posts)
         fetchPosts("").then((data) => { this.props.loadAllPosts(data) });
-    else if(this.props.match.params.operation && this.props.match.params.operation==='edit')
+    else if(this.props.match.params.operation
+            && this.props.match.params.operation===EDIT_OPERATION)
     {
       const post = this.props.posts.filter((elem) =>
                                         elem.id===this.props.match.params.post_id)[0];
@@ -49,21 +50,28 @@ class PostDetail extends Component {
     this.setState({ category: value });
   };
 
+  handlePush = (path, category) =>{
+    console.log(path);
+    console.log(category);
+    this.props.history.push(path);
+    this.props.pickCategory(category);
+  }
+
   handleUndo = (() => {
-    if(this.props.match.params.operation==='edit')
+    if(this.props.match.params.operation===EDIT_OPERATION)
     {
       const post = this.props.posts.filter((elem) =>
                                         elem.id===this.props.match.params.post_id)[0];
-      this.props.history.push('/'+post.category+'/'+post.id);
+      this.handlePush('/'+post.category+'/'+post.id, post.category);
     }
     else {
-      this.props.history.push('/');
+      this.handlePush('/',"");
     }
   });
 
   handleConfirm = (() => {
     const postId = this.props.match.params.post_id;
-    const editMode = this.props.match.params.operation === 'edit';
+    const editMode = this.props.match.params.operation === EDIT_OPERATION;
     if(this.state.title==="" || this.state.body==="" ||
         this.state.category==="" || this.state.author===""){
       this.props.raiseError("Please complete all required fields!");
@@ -75,7 +83,7 @@ class PostDetail extends Component {
         body: this.state.body
       }
       modifyPost(postId, postData).then((data) => { this.props.changePost(data);
-                              this.props.history.push('/'+data.category+'/'+data.id);});
+                            this.handlePush('/'+data.category+'/'+data.id, data.category);});
     }
     else{
       const postData = {
@@ -84,13 +92,13 @@ class PostDetail extends Component {
         timestamp: getTimestamp(),
       }
       addPost(postData).then((data) => { this.props.newPost(data);
-                              this.props.history.push('/'+data.category+'/'+data.id);});
+                              this.handlePush('/'+data.category+'/'+data.id, data.category);});
     }
   });
 
   render() {
     const categories =  this.props.categories;
-    const editMode = this.props.match.params.operation === 'edit';
+    const editMode = this.props.match.params.operation === EDIT_OPERATION;
     return (
       <div>
       <Card>
@@ -136,7 +144,8 @@ function mapDispatchToProps (dispatch) {
     newPost: (post) => dispatch(insertPost(post)),
     removePost: (post) => dispatch(deletePost(post)),
     loadAllPosts: (data) => dispatch(retrieveAllPosts(data)),
-    raiseError: (data) => dispatch(notifyError(data))
+    raiseError: (data) => dispatch(notifyError(data)),
+    pickCategory: (data) => dispatch(selectCategory(data))
    }
  }
 

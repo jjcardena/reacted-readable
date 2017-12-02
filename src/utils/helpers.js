@@ -1,4 +1,5 @@
-import moment from 'moment'
+import moment from 'moment';
+export const EDIT_OPERATION = 'EDIT';
 
 export function timestampToDate(timestamp) {
   var t = moment(new Date( timestamp ));

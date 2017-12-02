@@ -9,7 +9,7 @@ import Button from 'react-toolbox/lib/button/Button';
 import Chip from 'react-toolbox/lib/chip/Chip';
 import CommentsList from './CommentsList'
 import ControlToolbox from './ControlToolbox'
-import {timestampToDate} from '../utils/helpers';
+import {timestampToDate, EDIT_OPERATION } from '../utils/helpers';
 import { votePost, fetchComments, fetchPosts, delPost } from '../utils/api';
 import { updatePost, retrieveComments, retrieveAllPosts, deletePost } from '../actions';
 
@@ -23,22 +23,25 @@ class PostView extends Component {
       fetchComments(postId).then((data) => { this.props.loadComments(postId, data); } );
   }
 
+  handlePush = (path) =>{
+    this.props.history.push(path);
+  }
+
   handleClosePost = () => {
-    const category = this.props.match.params.category;
-    this.props.history.push('/'+category);
+    const cat = this.props.selCategory ? this.props.selCategory  : '';
+    this.handlePush('/'+cat);
   }
 
   handleEditPost = () => {
     const category = this.props.match.params.category;
     const postId = this.props.match.params.post_id;
-    this.props.history.push('/'+category+'/'+postId+'/edit');
+    this.handlePush('/'+category+'/'+postId+'/'+EDIT_OPERATION);
   }
 
   handleDeletePost = () => {
     const postId = this.props.match.params.post_id;
-    const category = this.props.match.params.category;
     delPost(postId).then((data) => { this.props.removePost(data); } );
-    this.props.history.push('/'+category);
+    this.handlePush('/');
   }
 
   handleDownVote = () => {
@@ -92,7 +95,8 @@ class PostView extends Component {
 function mapStateToProps(state){
   return {
     posts: state.postsReducer.posts,
-    comments : state.commentsReducer.comments
+    comments : state.commentsReducer.comments,
+    selCategory: state.categoriesReducer.selectedCategory
   }
 }
 

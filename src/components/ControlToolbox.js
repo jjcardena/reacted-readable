@@ -25,7 +25,6 @@ class ControlToolbox extends Component {
 }
 
 ControlToolbox.propTypes = {
-  voteScore: PropTypes.number.isRequired,
   parentName: PropTypes.string.isRequired
 }
 

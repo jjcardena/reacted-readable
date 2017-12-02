@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Button from 'react-toolbox/lib/button/Button';
 import ReactTooltip from 'react-tooltip';
-import PropTypes from 'prop-types';
 import CommentDetail from './CommentDetail'
 import { fetchComments } from '../utils/api'
 import { retrieveComments } from '../actions'
@@ -49,10 +48,6 @@ class CommentsList extends Component {
       </div>
     );
   }
-}
-
-CommentsList.propTypes = {
-  postId: PropTypes.string.isRequired
 }
 
 function mapStateToProps(state){
