@@ -14,7 +14,7 @@ Start project using npm
 
 ## Important
 The backend API uses a local development server that can be found [here](https://github.com/udacity/reactnd-project-readable-starter).
-Use the url const located in "src\utils\api.js" to set your url and port for the server.
+Use the url const located in [src\utils\api.js](https://github.com/jjcardena/reacted-readable/blob/master/src/utils/api.js) to set your url and port for the server.
 
 ## create-react-app
 
