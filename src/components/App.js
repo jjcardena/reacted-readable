@@ -31,7 +31,9 @@ class App extends Component {
   }
 
   handleSnackbarClose = () => {
-    this.props.raiseError("");
+    if(this.props.error.sendToRoot)
+          this.props.history.push('/');
+    this.props.raiseError("", false);
   }
 
   actions = [
@@ -69,26 +71,18 @@ class App extends Component {
             </Layout>
             <Dialog
               actions={this.actions}
-              active={this.props.error && this.props.error!=="" ? true : false}
+              active={this.props.error && this.props.error.errorMessage!=="" ? true : false}
               onEscKeyDown={this.handleSnackbarClose}
               onOverlayClick={this.handleSnackbarClose}
               title='Error message'>
-              <p>{this.props.error ? this.props.error : ""}</p>
+              <p>{this.props.error ? this.props.error.errorMessage : ""}</p>
             </Dialog>
           </div>
       </ThemeProvider>
     );
   }
 }
-// <Snackbar
-//   action='Dismiss'
-//   active={this.state.active}
-//   label={this.props.error}
-//   timeout={2000}
-//   onClick={this.handleSnackbarClose}
-//   onTimeout={this.handleSnackbarClose}
-//   type='cancel'
-// />
+
 function mapStateToProps(state){
   return {
     selectedCategory : state.categoriesReducer.selectedCategory,

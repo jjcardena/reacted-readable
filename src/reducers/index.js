@@ -1,29 +1,16 @@
-import {
-  RETRIEVE_CATEGORIES,
-  RETRIEVE_ALLPOSTS,
-  SELECT_CATEGORY,
-  ORDER_POSTS,
-  RETRIEVE_COMMENTS,
-  UPDATE_POST,
-  INSERT_POST,
-  DELETE_POST,
-  UPDATE_COMMENT,
-  INSERT_COMMENT,
-  DELETE_COMMENT,
-  NOTIFY_ERROR
-} from '../actions';
+import * as ActionTypes from '../actions/Constants';
 
 import { combineReducers } from 'redux';
 
 function categoriesReducer (state = {}, action){
   switch (action.type) {
-    case RETRIEVE_CATEGORIES :
+    case ActionTypes.RETRIEVE_CATEGORIES :
       return {
         ...state,
         categories: action.response.categories,
         selectedCategory: ""
       }
-    case SELECT_CATEGORY :
+    case ActionTypes.SELECT_CATEGORY :
     return {
       ...state,
       selectedCategory: action.category
@@ -35,32 +22,32 @@ function categoriesReducer (state = {}, action){
 
 function postsReducer (state = {}, action){
   switch (action.type) {
-    case RETRIEVE_ALLPOSTS :
+    case ActionTypes.RETRIEVE_ALLPOSTS :
       return {
         ...state,
         posts: action.response,
         postsOrder: ""
       }
-    case ORDER_POSTS :
+    case ActionTypes.ORDER_POSTS :
       return {
         ...state,
         postsOrder: action.order
       }
-    case UPDATE_POST :
+    case ActionTypes.UPDATE_POST :
       const { updatedPost } = action;
       const updateposts = state.posts.filter((post) => post.id!==updatedPost.id);
       return {
         ...state,
         posts: [...updateposts, updatedPost]
       }
-    case INSERT_POST :
+    case ActionTypes.INSERT_POST :
       const { newPost } = action;
       const insertposts = state.posts;
       return {
         ...state,
         posts: [...insertposts, newPost]
       }
-    case DELETE_POST :
+    case ActionTypes.DELETE_POST :
     const { deletedPost } = action;
       const deleteposts = state.posts.filter((post) => post.id!==deletedPost.id);
       return {
@@ -74,7 +61,7 @@ function postsReducer (state = {}, action){
 
 function commentsReducer (state = {}, action){
   switch (action.type) {
-    case RETRIEVE_COMMENTS :
+    case ActionTypes.RETRIEVE_COMMENTS :
       const { postId, loadedComments } = action
       return {
         ...state,
@@ -83,7 +70,7 @@ function commentsReducer (state = {}, action){
           [postId] : loadedComments,
         }
       }
-    case UPDATE_COMMENT :
+    case ActionTypes.UPDATE_COMMENT :
       const { updatedComment } = action;
       const updateComments = state.comments[updatedComment.parentId].filter(
                               (comment) => comment.id!==updatedComment.id);
@@ -94,7 +81,7 @@ function commentsReducer (state = {}, action){
           [updatedComment.parentId] : [...updateComments, updatedComment]
         }
       }
-      case INSERT_COMMENT :
+      case ActionTypes.INSERT_COMMENT :
         const { newComment } = action;
         const insertcomments = state.comments[newComment.parentId];
         return {
@@ -104,7 +91,7 @@ function commentsReducer (state = {}, action){
             [newComment.parentId] : [...insertcomments, newComment]
           }
         }
-      case DELETE_COMMENT :
+      case ActionTypes.DELETE_COMMENT :
       const { deletedComment } = action;
         const deletecomments = state.comments[deletedComment.parentId].filter(
                           (comment) => comment.id!==deletedComment.id);
@@ -122,12 +109,15 @@ function commentsReducer (state = {}, action){
 
 function errorReducer (state = {}, action){
   switch (action.type) {
-    case NOTIFY_ERROR :
-      const { error } = action
+    case ActionTypes.NOTIFY_ERROR :
+      const { error, sendToRoot } = action
       return {
         ...state,
-        error : error
+        error : {
+          errorMessage: error,
+          sendToRoot: sendToRoot
         }
+      }
     default :
       return state
   }

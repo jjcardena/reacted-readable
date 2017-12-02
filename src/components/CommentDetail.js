@@ -5,8 +5,8 @@ import CardTitle from 'react-toolbox/lib/card/CardTitle';
 import CardText from 'react-toolbox/lib/card/CardText';
 import Input from 'react-toolbox/lib/input/Input'
 import { timestampToDate , getTimestamp, getUniqueId } from '../utils/helpers';
-import { modifyComment, addComment, delComment, voteComment } from '../utils/api'
-import { updateComment, insertComment, deleteComment, notifyError } from '../actions'
+import { modifyComment, addComment, delComment, voteComment, fetchPost } from '../utils/api'
+import { updateComment, insertComment, deleteComment, notifyError, updatePost } from '../actions'
 import ControlToolbox from './ControlToolbox'
 import ConfirmToolbox  from './ConfirmToolbox'
 
@@ -58,6 +58,7 @@ class CommentDetail extends Component {
       addComment(commentData).then((data) => { this.props.newComment(data) ;
                                                this.setState({ newMode: false});
                                                this.props.refreshComments();
+                                               this.reloadPost(commentData.parentId);
                                              });
     }
     else if(this.state.editMode){
@@ -73,9 +74,14 @@ class CommentDetail extends Component {
     }
   }
 
+  reloadPost = (id) => {
+    fetchPost(id).then((data) => { this.props.refreshPost(data) });
+  }
+
   handleDeleteComment = () => {
     const comment = this.props.comment;
-    delComment(comment.id).then((data) => { this.props.removeComment(data) });
+    delComment(comment.id).then((data) => { this.props.removeComment(data)
+                                            this.reloadPost(comment.parentId);});
   }
 
   handleDownVote = () => {
@@ -140,7 +146,8 @@ function mapDispatchToProps (dispatch) {
      changeComment: (comment) => dispatch(updateComment(comment)),
      newComment: (comment) => dispatch(insertComment(comment)),
      removeComment: (comment) => dispatch(deleteComment(comment)),
-     raiseError: (data) => dispatch(notifyError(data))
+     raiseError: (data) => dispatch(notifyError(data)),
+     refreshPost: (post) => dispatch(updatePost(post))
    }
  }
 

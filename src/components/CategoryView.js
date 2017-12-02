@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import PostPreview from './PostPreview';
+import PostView from './PostView';
 import { fetchPosts } from '../utils/api'
 import { retrieveAllPosts } from '../actions'
 import { withRouter } from 'react-router-dom';
@@ -27,7 +27,7 @@ class CategoryView extends Component {
     return (
       posts && typeof(posts[0]) !== 'undefined' ?
       posts.map((post) =>
-          <PostPreview postInfo={post} key={post.id} />
+          <PostView postId={post.id} key={post.id} preView />
       )
       : ""
     )

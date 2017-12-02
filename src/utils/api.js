@@ -27,6 +27,16 @@ export function fetchPosts(category) {
 
 }
 
+export function fetchPost(id) {
+
+    return fetch(url+"/posts/"+id,
+      {
+          headers: { 'Authorization': authHeader }
+      })
+      .then((res) => res.json());
+
+}
+
 export function votePost(id, option) {
     return fetch(url+"/posts/"+id, {
       method: 'POST',

@@ -6,7 +6,7 @@ import CardText from 'react-toolbox/lib/card/CardText';
 import Input from 'react-toolbox/lib/input/Input';
 import { getTimestamp, EDIT_OPERATION } from '../utils/helpers';
 import { addPost, modifyPost, fetchPosts } from '../utils/api'
-import { updatePost, insertPost, deletePost, retrieveAllPosts, notifyError, selectCategory } from '../actions'
+import { updatePost, insertPost, deletePost, retrieveAllPosts, notifyError } from '../actions'
 import MenuItem from 'react-toolbox/lib/menu/MenuItem';
 import CustomDropDown from './CustomDropDown'
 import ConfirmToolbox  from './ConfirmToolbox'
@@ -51,10 +51,7 @@ class PostDetail extends Component {
   };
 
   handlePush = (path, category) =>{
-    console.log(path);
-    console.log(category);
     this.props.history.push(path);
-    this.props.pickCategory(category);
   }
 
   handleUndo = (() => {
@@ -144,8 +141,7 @@ function mapDispatchToProps (dispatch) {
     newPost: (post) => dispatch(insertPost(post)),
     removePost: (post) => dispatch(deletePost(post)),
     loadAllPosts: (data) => dispatch(retrieveAllPosts(data)),
-    raiseError: (data) => dispatch(notifyError(data)),
-    pickCategory: (data) => dispatch(selectCategory(data))
+    raiseError: (data) => dispatch(notifyError(data))
    }
  }
 

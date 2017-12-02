@@ -11,6 +11,12 @@ class CommentsList extends Component {
     newMode : false
   }
 
+  componentDidMount = () => {
+    const postId = this.props.postId;
+    if(!(this.props.comments && typeof(this.props.comments[postId])))
+      fetchComments(postId).then((data) => { this.props.loadComments(postId, data); } );
+  }
+
   handleNewComment = () => {
     this.setState({newMode: true});
   }
@@ -18,7 +24,7 @@ class CommentsList extends Component {
   handleRefreshComments = () => {
     this.setState({newMode: false});
     const postId = this.props.postId;
-    fetchComments(postId).then((data) => { this.props.loadComments(postId, data) } )
+    fetchComments(postId).then((data) => { this.props.loadComments(postId, data) } );
   }
 
   render() {

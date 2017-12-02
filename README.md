@@ -6,15 +6,25 @@ Clone this repo and use [npm](https://www.npmjs.com/):
 
     $ npm install --save
 
+The backend API uses a local development server that can be found [here](https://github.com/udacity/reactnd-project-readable-starter).
+
+Clone the repo and use [npm](https://www.npmjs.com/):
+
+    $ npm install
+
 ## Use
 
 Start project using npm
 
     $ npm start
 
+Start the backend using node
+
+    $ node server
+    
 ## Important
-The backend API uses a local development server that can be found [here](https://github.com/udacity/reactnd-project-readable-starter).
-Use the url const located in [src\utils\api.js](https://github.com/jjcardena/reacted-readable/blob/master/src/utils/api.js) to set your url and port for the server.
+
+Use the url const located in [src\utils\api.js](https://github.com/jjcardena/reacted-readable/blob/master/src/utils/api.js) to set your url and port for the backend server.
 
 ## create-react-app
 
